@@ -274,23 +274,15 @@ function handleProxyResponse(
   // if the request URL contains any of the excluded rewrite routes, we assume the response does not need to be server rendered.
   // instead, the response should just be relayed as usual.
   if (isUrlIgnored(request.originalUrl, config, true)) {
-    // check property in config property to apply that only for configured settings, not always...
-    // 
-    // New config properties:
-    //
-    // isProxyUrls: boolean
-    // proxyHost: string
     if (config.useProxyUrls) {
       serverResponse.write = (data: any, encoding: any): boolean => {
         try {
-          // console.log(config);
           var jsonData = JSON.parse(data);
           updateObject(jsonData, config.apiHost, config.proxyHost);
 
           var buf = Buffer.from(JSON.stringify(jsonData), encoding);
           originWrite.call(serverResponse, buf);
         } catch (err) {
-          // console.log(err);
         }
 
         return true;

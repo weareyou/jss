@@ -1,6 +1,6 @@
-# Sitecore JavaScript Services Proxy
+# Sitecore JavaScript Services Proxy with hidding prod URLs
 
-This module is provided as a part of Sitecore JavaScript Services. It contains the headless-mode SSR proxy implementation.
+This solution is a fork of the [sitecore-jss-proxy](https://github.com/Sitecore/jss/tree/master/packages/sitecore-jss-proxy) package with new feature that hiddes the real prod URL in proxy server.
 
-Consult the [Sitecore JSS documentation](https://jss.sitecore.net) for further details.
+Please contact evgeniy.rotar@colours.nl if you have any questions
 
