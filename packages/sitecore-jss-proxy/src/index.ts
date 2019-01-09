@@ -270,12 +270,12 @@ function handleProxyResponse(
   }
 
   let originWrite = serverResponse.write;
-  delete proxyResponse.headers['content-length'];
+  // delete proxyResponse.headers['content-length'];
 
   // if the request URL contains any of the excluded rewrite routes, we assume the response does not need to be server rendered.
   // instead, the response should just be relayed as usual.
   if (isUrlIgnored(request.originalUrl, config, true)) {
-    if (config.useProxyUrls) {
+    if (config.useProxyUrls && request.originalUrl.indexOf('/sitecore/api/jss/dictionary') !== -1) {
       serverResponse.write = (data: any, encoding: any): boolean => {
         try {
           var jsonData = JSON.parse(data);
