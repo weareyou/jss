@@ -270,6 +270,7 @@ function handleProxyResponse(
   }
 
   let originWrite = serverResponse.write;
+  delete proxyResponse.headers['content-length'];
 
   // if the request URL contains any of the excluded rewrite routes, we assume the response does not need to be server rendered.
   // instead, the response should just be relayed as usual.
