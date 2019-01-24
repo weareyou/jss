@@ -67,7 +67,7 @@ async function renderAppToResponse(
   }
 
   // we are going to set our own status code if rendering fails
-  serverResponse.writeHead = () => {};
+  serverResponse.writeHead = () => { };
 
   // buffer the response body as it is written for later processing
   let buf = Buffer.from('');
@@ -345,7 +345,7 @@ export function rewriteRequestPath(
     if (config.debug) {
       console.log(`DEBUG: Parsing route URL using ${decodedReqPath} URL...`);
     }
-    const routeParams = parseRouteUrl(decodedReqPath);
+    const routeParams = parseRouteUrl(finalReqPath);
 
     if (routeParams) {
       if (routeParams.sitecoreRoute) {
