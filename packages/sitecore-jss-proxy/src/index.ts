@@ -137,6 +137,24 @@ async function renderAppToResponse(
     completeProxyResponse(Buffer.from(errorResponse.content), errorResponse.statusCode, {});
   }
 
+  async function replyWithRedirect() {
+    let redirectResponse = {
+      statusCode: proxyResponse.statusCode || 301,
+      content: proxyResponse.statusMessage || 'Redirect',
+    };
+
+    completeProxyResponse(Buffer.from(redirectResponse.content), redirectResponse.statusCode, {});
+  }
+
+  async function replyWithEmptyBody() {
+    let emptyResponse = {
+      statusCode: proxyResponse.statusCode || 200,
+      content: proxyResponse.statusMessage || 'OK',
+    };
+
+    completeProxyResponse(Buffer.from(emptyResponse.content), emptyResponse.statusCode, {});
+  }
+
   // callback handles the result of server-side rendering
   async function handleRenderingResult(error: Error | null, result: RenderResponse | null) {
     if (!error && !result) {
@@ -230,18 +248,27 @@ async function renderAppToResponse(
       }
       const viewBag = await createViewBag(layoutServiceData);
 
-      if (!layoutServiceData) {
+      // the case for no-body request, for instance via curl with -IL params
+      if(!layoutServiceData && proxyResponse.statusCode === 200) {
+        return replyWithEmptyBody();
+      }
+      
+      if (!layoutServiceData && proxyResponse.statusCode !== 301 && proxyResponse.statusCode !== 302) {
         throw new Error(
           `Received invalid response ${proxyResponse.statusCode} ${proxyResponse.statusMessage}`
         );
       }
 
+      if (proxyResponse.statusCode === 301 || proxyResponse.statusCode === 302) {
+        return replyWithRedirect();
+      }
       return renderer(
         handleRenderingResult,
         (request as any).originalUrl,
         layoutServiceData,
         viewBag
       );
+      
     } catch (error) {
       return replyWithError(error);
     }
