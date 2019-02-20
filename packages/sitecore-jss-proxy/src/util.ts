@@ -27,9 +27,21 @@ const traverseAndUpdate = (instance: any, oldValue: string, newValue: string): v
 
 export const buildQueryString = (params: any) =>
   Object.keys(params)
-  .map((k) => `${encodeURIComponent(k)}=${encodeURIComponent(params[k])}`)
-  .join('&');
+    .map((k) => `${encodeURIComponent(k)}=${encodeURIComponent(params[k])}`)
+    .join('&');
 
 export const updateObject = (instance: any, oldValue: string, newValue: string) => {
   traverseAndUpdate(instance, oldValue, newValue);
+}
+
+export const buildLayoutServiceUrl = (path: string, lang: string): string => {
+  let finalLang = 'nl-NL';
+  let sc_site_lang = '';
+  if (lang === 'en') {
+    sc_site_lang = '_en';
+    finalLang = 'en';
+  }
+  const result = `${path}&sc_lang=${finalLang}&sc_site=weareyou${sc_site_lang}`;
+
+  return result;
 }

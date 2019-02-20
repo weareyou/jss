@@ -6,7 +6,7 @@ import { AppRenderer } from './AppRenderer';
 import { ProxyConfig } from './ProxyConfig';
 import { RenderResponse } from './RenderResponse';
 import { RouteUrlParser } from './RouteUrlParser';
-import { buildQueryString, tryParseJson, updateObject } from './util';
+import { buildLayoutServiceUrl, buildQueryString, tryParseJson, updateObject } from './util';
 
 // tslint:disable:max-line-length
 
@@ -249,10 +249,10 @@ async function renderAppToResponse(
       const viewBag = await createViewBag(layoutServiceData);
 
       // the case for no-body request, for instance via curl with -IL params
-      if(!layoutServiceData && proxyResponse.statusCode === 200) {
+      if (!layoutServiceData && proxyResponse.statusCode === 200) {
         return replyWithEmptyBody();
       }
-      
+
       if (!layoutServiceData && proxyResponse.statusCode !== 301 && proxyResponse.statusCode !== 302) {
         throw new Error(
           `Received invalid response ${proxyResponse.statusCode} ${proxyResponse.statusMessage}`
@@ -268,7 +268,7 @@ async function renderAppToResponse(
         layoutServiceData,
         viewBag
       );
-      
+
     } catch (error) {
       return replyWithError(error);
     }
@@ -400,7 +400,8 @@ export function rewriteRequestPath(
     }`;
 
   if (lang) {
-    path = `${path}&sc_lang=${lang}`;
+    // path = `${path}&sc_lang=${lang}`;
+    path = buildLayoutServiceUrl(path, lang);
   }
 
   if (qs) {
