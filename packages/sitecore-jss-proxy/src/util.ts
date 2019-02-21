@@ -12,36 +12,26 @@ export const tryParseJson = (jsonString: string) => {
   return null;
 };
 
-const traverseAndUpdate = (instance: any, oldValue: string, newValue: string): void => {
-  for (var i in instance) {
-    if (instance[i] !== null && typeof (instance[i]) == "object") {
-      //going one step down in the object tree!!
-      traverseAndUpdate(instance[i], oldValue, newValue);
-    } else {
-      if (typeof (instance[i]) == 'string' && instance[i].indexOf(oldValue) > -1) {
-        instance[i] = instance[i].replace(oldValue, newValue);
-      }
-    }
-  }
-}
-
 export const buildQueryString = (params: any) =>
   Object.keys(params)
     .map((k) => `${encodeURIComponent(k)}=${encodeURIComponent(params[k])}`)
     .join('&');
 
-export const updateObject = (instance: any, oldValue: string, newValue: string) => {
-  traverseAndUpdate(instance, oldValue, newValue);
-}
-
+/** Builds layout service URL for site resolver with sc_site param */
 export const buildLayoutServiceUrl = (path: string, lang: string): string => {
   let finalLang = 'nl-NL';
-  let sc_site_lang = '';
+  let scSiteLang = '';
   if (lang === 'en') {
-    sc_site_lang = '_en';
+    scSiteLang = '_en';
     finalLang = 'en';
   }
-  const result = `${path}&sc_lang=${finalLang}&sc_site=weareyou${sc_site_lang}`;
+  const result = `${path}&sc_lang=${finalLang}&sc_site=weareyou${scSiteLang}`;
 
   return result;
-}
+};
+
+export const buildLayoutServiceUrlForLang = (layoutServiceRoute: string, lang: string, apiKey: string): string => {
+  const url = `${layoutServiceRoute}?item=${lang}&sc_apikey=${apiKey}`;
+
+  return url;
+};

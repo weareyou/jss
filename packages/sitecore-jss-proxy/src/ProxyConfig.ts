@@ -54,6 +54,6 @@ export interface ProxyConfig {
   ) => void;
   /** Responses from the proxy greater than this size (in bytes) are rejected. */
   maxResponseSizeBytes?: number;
-  /** Indicates if proxy server will replace URLs from layout service by proxy's URL's (replace apiHost by proxyHost) */
-  useProxyUrls?: boolean;
+  /** Contains list of the supported languages */
+  supportedLanguages?: string[];
 }

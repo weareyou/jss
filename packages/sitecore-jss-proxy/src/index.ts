@@ -6,7 +6,7 @@ import { AppRenderer } from './AppRenderer';
 import { ProxyConfig } from './ProxyConfig';
 import { RenderResponse } from './RenderResponse';
 import { RouteUrlParser } from './RouteUrlParser';
-import { buildLayoutServiceUrl, buildQueryString, tryParseJson, updateObject } from './util';
+import { buildLayoutServiceUrl, buildLayoutServiceUrlForLang, buildQueryString, tryParseJson } from './util';
 
 // tslint:disable:max-line-length
 
@@ -138,7 +138,7 @@ async function renderAppToResponse(
   }
 
   async function replyWithRedirect() {
-    let redirectResponse = {
+    const redirectResponse = {
       statusCode: proxyResponse.statusCode || 301,
       content: proxyResponse.statusMessage || 'Redirect',
     };
@@ -147,7 +147,7 @@ async function renderAppToResponse(
   }
 
   async function replyWithEmptyBody() {
-    let emptyResponse = {
+    const emptyResponse = {
       statusCode: proxyResponse.statusCode || 200,
       content: proxyResponse.statusMessage || 'OK',
     };
@@ -243,9 +243,6 @@ async function renderAppToResponse(
   serverResponse.end = async () => {
     try {
       const layoutServiceData = await extractLayoutServiceDataFromProxyResponse();
-      if (config.useProxyUrls) {
-        updateObject(layoutServiceData, config.apiHost, config.proxyHost);
-      }
       const viewBag = await createViewBag(layoutServiceData);
 
       // the case for no-body request, for instance via curl with -IL params
@@ -295,34 +292,9 @@ function handleProxyResponse(
       JSON.stringify(proxyResponse.headers, null, 2)
     );
   }
-
-  let originWrite = serverResponse.write;
-
   // if the request URL contains any of the excluded rewrite routes, we assume the response does not need to be server rendered.
   // instead, the response should just be relayed as usual.
   if (isUrlIgnored(request.originalUrl, config, true)) {
-    // check property in config property to apply that only for configured settings, not always...
-    // 
-    // New config properties:
-    //
-    // isProxyUrls: boolean
-    // proxyHost: string
-    if (config.useProxyUrls) {
-      serverResponse.write = (data: any, encoding: any): boolean => {
-        try {
-          // console.log(config);
-          var jsonData = JSON.parse(data);
-          updateObject(jsonData, config.apiHost, config.proxyHost);
-
-          var buf = Buffer.from(JSON.stringify(jsonData), encoding);
-          originWrite.call(serverResponse, buf);
-        } catch (err) {
-          // console.log(err);
-        }
-
-        return true;
-      }
-    }
     return Promise.resolve(undefined);
   }
 
@@ -400,8 +372,14 @@ export function rewriteRequestPath(
     }`;
 
   if (lang) {
-    // path = `${path}&sc_lang=${lang}`;
     path = buildLayoutServiceUrl(path, lang);
+    // unsupported languages
+    if (config.supportedLanguages !== undefined && !config.supportedLanguages.includes(lang)) {
+      path = buildLayoutServiceUrlForLang(config.layoutServiceRoute, lang, config.apiKey);
+    }
+    // if (lang !== 'en' && lang !== 'nl') {
+    //   path = buildLayoutServiceUrlForLang(config.layoutServiceRoute, lang, config.apiKey);
+    // }
   }
 
   if (qs) {
