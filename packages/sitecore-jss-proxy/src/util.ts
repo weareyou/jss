@@ -17,13 +17,13 @@ export const buildQueryString = (params: any) =>
     .map((k) => `${encodeURIComponent(k)}=${encodeURIComponent(params[k])}`)
     .join('&');
 
-/** Builds layout service URL for site resolver with sc_site param */
+/** Builds layout service URL for site resolver with sc_site and sc_lang params */
 export const buildLayoutServiceUrl = (path: string, lang: string): string => {
   let finalLang = 'nl-NL';
   let scSiteLang = '';
   if (lang === 'en') {
     scSiteLang = '_en';
-    finalLang = 'en';
+    finalLang = lang;
   }
   const result = `${path}&sc_lang=${finalLang}&sc_site=weareyou${scSiteLang}`;
 

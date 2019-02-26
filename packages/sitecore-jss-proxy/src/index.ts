@@ -138,6 +138,7 @@ async function renderAppToResponse(
   }
 
   async function replyWithRedirect() {
+    // default redirect is 301 Redirect
     const redirectResponse = {
       statusCode: proxyResponse.statusCode || 301,
       content: proxyResponse.statusMessage || 'Redirect',
@@ -147,6 +148,7 @@ async function renderAppToResponse(
   }
 
   async function replyWithEmptyBody() {
+    // default empty response is 200 OK
     const emptyResponse = {
       statusCode: proxyResponse.statusCode || 200,
       content: proxyResponse.statusMessage || 'OK',
@@ -249,15 +251,15 @@ async function renderAppToResponse(
       if (!layoutServiceData && proxyResponse.statusCode === 200) {
         return replyWithEmptyBody();
       }
-
-      if (!layoutServiceData && proxyResponse.statusCode !== 301 && proxyResponse.statusCode !== 302) {
+      // if response status code 301 or 302 then redirect will be executed
+      if (proxyResponse.statusCode === 301 || proxyResponse.statusCode === 302) {
+        return replyWithRedirect();
+      }
+      // original response: if no 200 without body, no 301/302 and no data from layout service the error will be thrown
+      if (!layoutServiceData) {
         throw new Error(
           `Received invalid response ${proxyResponse.statusCode} ${proxyResponse.statusMessage}`
         );
-      }
-
-      if (proxyResponse.statusCode === 301 || proxyResponse.statusCode === 302) {
-        return replyWithRedirect();
       }
       return renderer(
         handleRenderingResult,
@@ -373,13 +375,10 @@ export function rewriteRequestPath(
 
   if (lang) {
     path = buildLayoutServiceUrl(path, lang);
-    // unsupported languages
+    // build URL for unsupported language
     if (config.supportedLanguages !== undefined && !config.supportedLanguages.includes(lang)) {
       path = buildLayoutServiceUrlForLang(config.layoutServiceRoute, lang, config.apiKey);
     }
-    // if (lang !== 'en' && lang !== 'nl') {
-    //   path = buildLayoutServiceUrlForLang(config.layoutServiceRoute, lang, config.apiKey);
-    // }
   }
 
   if (qs) {
