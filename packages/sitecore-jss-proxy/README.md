@@ -1,15 +1,19 @@
-# Sitecore JavaScript Services Proxy
+# WeAreYou Sitecore JavaScript Services Proxy
 
-This module is provided as a part of Sitecore JavaScript Services. It contains the headless-mode SSR proxy implementation with some critical defects.
+This module is provided as a part of Sitecore JavaScript Services. It contains the headless-mode SSR proxy implementation with some critical defects and new features.
+You can find Sitecore JSS source code [here](https://github.com/Sitecore/jss).
 
-The **2.3.0** version includes the following defects:
+## The **2.3.0** version includes the following defects:
 
-1. [301 is not valid response](https://github.com/Sitecore/jss/issues/138)
-2. [Query string aren't transferred properly](https://github.com/Sitecore/jss/issues/140)
-3. [CURL URL returns 500 OK](https://github.com/Sitecore/jss/issues/160)
-4. Build LayoutService url with sc_site param during rendering page (no github bug)
-5. Build LayoutService url for unsupported languages(new **supportedLanguages** is available in proxy configuration)
+- [301 is not valid response](https://github.com/Sitecore/jss/issues/138)
+- [Query string aren't transferred properly](https://github.com/Sitecore/jss/issues/140)
+- [CURL URL returns 500 OK](https://github.com/Sitecore/jss/issues/160)
+
+## The **2.3.0** version includes the following features:
+
+- Build LayoutService url with **sc_site** and **sc_lang** params during rendering page (no github bug)
+- Build LayoutService url for unsupported languages(new **supportedLanguages** param is available in proxy configuration)
 
 
-Consult the [Sitecore JSS documentation](https://jss.sitecore.net) for further details.
+You can find the Sitecore JSS documentation [here](https://jss.sitecore.net).
 
