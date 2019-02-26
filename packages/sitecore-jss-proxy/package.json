@@ -16,6 +16,11 @@
     "type": "git",
     "url": "git+https://github.com/Eugenio161288/jss.git"
   },
+  "keywords": [
+    "jss",
+    "proxy",
+    "sitecore"
+  ],
   "engines": {
     "node": ">=8.1"
   },
