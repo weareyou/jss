@@ -13,6 +13,7 @@ You can find Sitecore JSS source code [here](https://github.com/Sitecore/jss).
 
 - Build LayoutService url with **sc_site** and **sc_lang** params during rendering page (no github bug)
 - Build LayoutService url for unsupported languages(new **supportedLanguages** param is available in proxy configuration)
+- Do not throw exceptions while parsing responses
 
 
 You can find the Sitecore JSS documentation [here](https://jss.sitecore.net).
