@@ -6,7 +6,7 @@ export const tryParseJson = (jsonString: string) => {
       return json;
     }
   } catch (e) {
-    console.error(`error parsing json string '${jsonString}'`, e);
+    console.log(`no json to parse: '${jsonString}'`, e);
   }
 
   return null;
