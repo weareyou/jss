@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { buildLayoutServiceUrl, buildLayoutServiceUrlForLang, buildQueryString, tryParseJson } from './util';
+import { buildLayoutServiceUrl, buildLayoutServiceUrlForLang, buildQueryString, tryParseJson, generateCacheKey } from './util';
 
 describe('tryParseJson', () => {
   it('should return parsed object when the string is json', () => {
@@ -77,6 +77,30 @@ describe('buildLayoutServiceUrlForLang', () => {
     const expected = '?item=&sc_apikey=';
 
     const actual = buildLayoutServiceUrlForLang(route, lang, apiKey);
+
+    expect(actual).to.equal(expected);
+  });
+});
+
+describe('generateCacheKey', () => {
+  it('should return cache key with - as separator', () => {
+    const expected = 'site-lang-item';
+
+    const actual = generateCacheKey(['site', 'lang', 'item']);
+
+    expect(actual).to.equal(expected);
+  });
+  it('should return param without - with one pram', () => {
+    const expected = 'sitedomain';
+
+    const actual = generateCacheKey(['sitedomain']);
+
+    expect(actual).to.equal(expected);
+  });
+  it('should return empty key with empty params', () => {
+    const expected = '';
+
+    const actual = generateCacheKey(['', '', '', '', '']);
 
     expect(actual).to.equal(expected);
   });
