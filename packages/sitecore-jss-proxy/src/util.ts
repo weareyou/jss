@@ -35,3 +35,17 @@ export const buildLayoutServiceUrlForLang = (layoutServiceRoute: string, lang: s
 
   return url;
 };
+
+export const generateCacheKey = (params: string[]): string => {
+  let result: string = '';
+
+  params.forEach(param => {
+    if (result !== '') {
+      result = `${result}-${param}`;
+    } else {
+      result = param;
+    }
+  });
+
+  return result;
+}
