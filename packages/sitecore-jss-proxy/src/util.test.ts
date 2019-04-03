@@ -103,5 +103,5 @@ describe('generateCacheKey', () => {
     const actual = generateCacheKey(['', '', '', '', '']);
 
     expect(actual).to.equal(expected);
-  })
+  });
 });
