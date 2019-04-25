@@ -28,6 +28,8 @@ export interface ProxyConfig {
   proxyOptions?: HttpProxyConfig;
   /** Enables or disables proxy diagnostics in console.log (disable for production or get bad performance) */
   debug?: boolean;
+  /** Enables or disables url rewrite on server side based on JSS response */
+  useRewrite?: boolean;
   /** Callback when an exception is thrown during SSR; decides what to send back to client (500 errors) */
   onError?: (
     error: Error,
