@@ -5,10 +5,6 @@ variables:
   artifactName: drop
   feedName: weareyou
   nodeVersion: 12.16.1
-  Major: 2
-  Minor: 4
-
-name: $(Major).$(Minor)$(rev:.r)
 
 stages:
 - stage: Build
@@ -32,14 +28,13 @@ stages:
       displayName: Bootstrapping packages
       inputs:
         command: custom
-        customCommand: run bootstrap-packages:ci
+        customCommand: run bootstrap-packages:weareyou
 
     - task: Npm@1
       displayName: Build-packages
       inputs:
         command: custom
-        customCommand: run build-packages
-
+        customCommand: run build-packages:weareyou
 
     - task: PublishPipelineArtifact@1
       displayName: Publish Pipeline Artifact
