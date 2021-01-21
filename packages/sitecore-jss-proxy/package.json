@@ -1,6 +1,6 @@
 {
   "name": "@weareyou/sitecore-jss-proxy",
-  "version": "2.3.1",
+  "version": "3.3.3",
   "description": "Proxy middleware for express.js server with setting redirect statuses.",
   "main": "dist/index.js",
   "scripts": {
