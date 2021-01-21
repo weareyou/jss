@@ -2,7 +2,8 @@ trigger: none
 pr: none
 
 variables:
-  artifactName: drop
+  proxyArtifactName: jss-proxy
+  proxyBuildPath: $(System.DefaultWorkingDirectory)/packages/sitecore-jss-proxy
   feedName: weareyou
   nodeVersion: 12.16.1
 
@@ -25,22 +26,22 @@ stages:
         command: ci
 
     - task: Npm@1
-      displayName: Bootstrapping packages
+      displayName: Bootstrapping packages WAY
       inputs:
         command: custom
         customCommand: run bootstrap-packages:weareyou
 
     - task: Npm@1
-      displayName: Build-packages
+      displayName: Build-packages WAY
       inputs:
         command: custom
         customCommand: run build-packages:weareyou
 
     - task: PublishPipelineArtifact@1
-      displayName: Publish Pipeline Artifact
+      displayName: Publish Pipeline Artifact Proxy
       inputs:
-        path: $(System.DefaultWorkingDirectory)
-        artifact: $(artifactName)
+        path: $(proxyBuildPath)
+        artifact: $(proxyArtifactName)
 
 - stage: Publish
   dependsOn: Build
@@ -57,9 +58,9 @@ stages:
         versionSpec: $(nodeVersion)
 
     - task: DownloadPipelineArtifact@2
-      displayName: Download Pipeline Artifact
+      displayName: Download Pipeline Artifact Proxy
       inputs:
-        artifact: $(artifactName)
+        artifact: $(proxyArtifactName)
         path: $(Build.SourcesDirectory)
 
     - task: Npm@1
