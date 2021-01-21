@@ -9,7 +9,7 @@
     "lint": "tslint -p . -c ../../tslint.json 'src/**/*.ts'",
     "test": "mocha --require ts-node/register \"./src/**/*.test.ts\"",
     "test-utils": "mocha --require ts-node/register \"./src/util.test.ts\"",
-    "prepublishOnly": "npm run build",
+    
     "coverage": "nyc --require ts-node/register npm test"
   },
   "repository": {
