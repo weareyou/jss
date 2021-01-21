@@ -1,0 +1,78 @@
+trigger:
+- none
+
+pr: none
+
+variables:
+  artifactName: drop
+  feedName: weareyou
+  nodeVersion: 12.16.1
+  Major: 2
+  Minor: 4
+
+name: $(Major).$(Minor)$(rev:.r)
+
+stages:
+- stage: Build
+  dependsOn: []
+  jobs:
+  - job: Build
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: NodeTool@0
+      displayName: 'Use Node.js $(nodeVersion)'
+      inputs:
+        versionSpec: $(nodeVersion)
+
+    - task: Npm@1
+      displayName: Install Packages
+      inputs:
+        command: ci
+
+    - task: Npm@1
+      displayName: Bootstrapping packages
+      inputs:
+        command: custom
+        customCommand: run bootstrap-packages:ci
+
+    - task: Npm@1
+      displayName: Build-packages
+      inputs:
+        command: custom
+        customCommand: run build-packages
+
+
+    - task: PublishPipelineArtifact@1
+      displayName: Publish Pipeline Artifact
+      inputs:
+        path: $(System.DefaultWorkingDirectory)
+        artifact: $(artifactName)
+
+- stage: Publish
+  dependsOn: Build
+  jobs:
+  - job: Publish
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - checkout: none
+    
+    - task: NodeTool@0
+      displayName: 'Use Node.js $(nodeVersion)'
+      inputs:
+        versionSpec: $(nodeVersion)
+
+    - task: DownloadPipelineArtifact@2
+      displayName: Download Pipeline Artifact
+      inputs:
+        artifact: $(artifactName)
+        path: $(Build.SourcesDirectory)
+
+    - task: Npm@1
+      displayName: Publish Package
+      enabled: false
+      inputs:
+        command: publish
+        publishRegistry: useFeed
+        publishFeed: $(feedName)
