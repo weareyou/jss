@@ -1,7 +1,7 @@
 {
-  "name": "@weareyou/sitecore-jss-proxy",
+  "name": "@weareyou-devops/sitecore-jss-proxy",
   "version": "3.3.3",
-  "description": "Proxy middleware for express.js server with setting redirect statuses.",
+  "description": "WAY-fork: Proxy middleware for express.js server with setting redirect statuses.",
   "main": "dist/index.js",
   "scripts": {
     "build": "npm run clean && tsc",

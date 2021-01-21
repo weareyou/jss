@@ -11,8 +11,8 @@
     "test": "lerna run test",
     "coverage-packages": "lerna run coverage --ignore *-sample*",
 
-    "bootstrap-packages:weareyou": "lerna bootstrap --ci --scope @weareyou/*",
-    "build-packages:weareyou": "lerna run build --scope @weareyou/*"
+    "bootstrap-packages:weareyou": "lerna bootstrap --ci --scope @weareyou-devops/*",
+    "build-packages:weareyou": "lerna run build --scope @weareyou-devops/*"
   },
   "author": {
     "name": "Sitecore Corporation",
